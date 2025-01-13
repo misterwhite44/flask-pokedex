@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémons</title>
+    <style>
+        .pokemon {
+            text-align: center;
+            margin: 20px;
+        }
+        .pokemon img {
+            width: 150px;
+            height: 150px;
+        }
+        .navigation {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokémons</h1>
+    <div id="pokemon-container">
+        {% if pokemons %}
+            <div class="pokemon" id="pokemon-0">
+                <h3>{{ pokemons[0].name.capitalize() }}</h3>
+                <img src="{{ pokemons[0].image_url }}" alt="{{ pokemons[0].name }}">
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="navigation">
+        <button class="button" id="prev">← Précédent</button>
+        <button class="button" id="next">Suivant →</button>
+    </div>
+
+    <script>
+        let pokemons = {{ pokemons | tojson }};
+        let currentIndex = 0;
+
+        const updatePokemon = (index) => {
+            const pokemon = pokemons[index];
+            const container = document.getElementById('pokemon-container');
+            container.innerHTML = `
+                <div class="pokemon">
+                    <h3>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
+                    <img src="${pokemon.image_url}" alt="${pokemon.name}">
+                </div>
+            `;
+        };
+
+        document.getElementById('next').addEventListener('click', () => {
+            if (currentIndex < pokemons.length - 1) {
+                currentIndex++;
+                updatePokemon(currentIndex);
+            }
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updatePokemon(currentIndex);
+            }
+        });
+    </script>
+</body>
+</html>
