@@ -4,7 +4,7 @@ import requests
 app = Flask(__name__)
 
 # URL de l'API PokeAPI pour récupérer les pokémons
-POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon"
+POKEAPI_URL = "https://pokeapi.co/api/v2/pokemon?limit=150&offset=0"
 
 def get_pokemon_data(url):
     """Fonction pour récupérer les détails du pokémon depuis son URL."""
