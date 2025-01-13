@@ -13,9 +13,16 @@ def get_pokemon_data(url):
         data = response.json()
         name = data['name']
         image_url = data['sprites']['front_default']  # Image du pokémon
+        types = [t['type']['name'] for t in data['types']]  # Récupérer les types
+        height = data['height'] / 10  # Convertir la taille en mètres
+        weight = data['weight'] / 10  # Convertir le poids en kg
+        
         return {
             'name': name,
-            'image_url': image_url
+            'image_url': image_url,
+            'types': types,
+            'height': height,
+            'weight': weight
         }
     return None
 
