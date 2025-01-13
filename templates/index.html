@@ -3,29 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pokémons</title>
+    <title>Pokédex</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header a {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        header a:hover {
+            color: #0056b3;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Search Bar Styles */
+        #search-bar {
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Dark Mode Toggle Button */
+        #dark-mode-toggle {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #dark-mode-toggle:hover {
+            background-color: #0056b3;
+        }
+
+        /* Main Content Styles */
         .pokemon {
             text-align: center;
             margin: 20px;
         }
+
         .pokemon img {
             width: 150px;
             height: 150px;
         }
+
+        .pokemon-small {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .pokemon-small img {
+            width: 50px;
+            height: 50px;
+        }
+
         .navigation {
             text-align: center;
             margin-top: 20px;
         }
-        .button {
+
+        .button-nav {
             padding: 10px;
             font-size: 16px;
             cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .pokedex-container {
+            display: none;
+            text-align: center;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        header.dark-mode {
+            background-color: #333333;
+            border-color: #555555;
+        }
+
+        #dark-mode-toggle.dark-mode {
+            background-color: #28a745;
+        }
+
+        #dark-mode-toggle.dark-mode:hover {
+            background-color: #1e7e34;
         }
     </style>
 </head>
 <body>
-    <h1>Pokémons</h1>
+
+    <!-- Header Section -->
+    <header>
+        <a href="#" id="pokedex-link">Pokédex</a>
+        <div class="header-buttons">
+            <input type="text" id="search-bar" placeholder="Rechercher un Pokémon...">
+            <button id="dark-mode-toggle">🌙 Dark Mode</button>
+        </div>
+    </header>
+
+    <!-- Pokémon View -->
     <div id="pokemon-container">
         {% if pokemons %}
             <div class="pokemon" id="pokemon-0">
@@ -35,15 +150,25 @@
         {% endif %}
     </div>
 
+    <!-- Navigation Buttons -->
     <div class="navigation">
-        <button class="button" id="prev">← Précédent</button>
-        <button class="button" id="next">Suivant →</button>
+        <button class="button-nav" id="prev">← Précédent</button>
+        <button class="button-nav" id="next">Suivant →</button>
     </div>
 
+    <!-- Pokédex Container -->
+    <div id="pokedex-container" class="pokedex-container">
+        <h2>Tous les Pokémons</h2>
+        <div id="pokedex"></div>
+        <button class="button-nav" id="back-to-view">Retour</button>
+    </div>
+
+    <!-- JavaScript Section -->
     <script>
         let pokemons = {{ pokemons | tojson }};
         let currentIndex = 0;
 
+        // Fonction pour afficher un Pokémon individuel
         const updatePokemon = (index) => {
             const pokemon = pokemons[index];
             const container = document.getElementById('pokemon-container');
@@ -55,6 +180,7 @@
             `;
         };
 
+        // Gestion des boutons de navigation
         document.getElementById('next').addEventListener('click', () => {
             if (currentIndex < pokemons.length - 1) {
                 currentIndex++;
@@ -68,6 +194,43 @@
                 updatePokemon(currentIndex);
             }
         });
+
+        // Afficher tout le pokédex avec des vignettes
+        document.getElementById('pokedex-link').addEventListener('click', (event) => {
+            event.preventDefault();
+            const pokedexContainer = document.getElementById('pokedex-container');
+            const pokedex = document.getElementById('pokedex');
+            pokedex.innerHTML = '';  // Réinitialiser la liste des pokémons
+
+            pokemons.forEach(pokemon => {
+                const pokemonDiv = document.createElement('div');
+                pokemonDiv.className = 'pokemon-small';
+                pokemonDiv.innerHTML = `
+                    <img src="${pokemon.image_url}" alt="${pokemon.name}">
+                    <p>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</p>
+                `;
+                pokedex.appendChild(pokemonDiv);
+            });
+
+            document.getElementById('pokemon-container').style.display = 'none';  // Cacher la vue individuelle
+            pokedexContainer.style.display = 'block';  // Afficher le pokédex
+        });
+
+        // Retour à la vue individuelle
+        document.getElementById('back-to-view').addEventListener('click', () => {
+            document.getElementById('pokemon-container').style.display = 'block';  // Afficher la vue individuelle
+            document.getElementById('pokedex-container').style.display = 'none';  // Cacher le pokédex
+        });
+
+        // Activer le mode sombre
+        const toggleDarkMode = () => {
+            document.body.classList.toggle('dark-mode');
+            document.querySelector('header').classList.toggle('dark-mode');
+            document.getElementById('dark-mode-toggle').classList.toggle('dark-mode');
+        };
+
+        document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
     </script>
+
 </body>
 </html>
