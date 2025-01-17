@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokédex</title>
-</head>
-<style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
         body {
         font-family: Arial, sans-serif;
         margin: 0;
@@ -20,18 +22,42 @@
         border-bottom: 2px solid #ccc;
     }
     header a {
-        font-size: 24px;
+        font-family: 'poppins';
         font-weight: bold;
+        font-size: 16px;
+        color: #FFF;
         text-decoration: none;
-        color: #007bff;
     }
+    
     header a:hover {
-        color: #0056b3;
+        color: #dfdb00;
     }
-    .dark-mode {
-        background-color: #333;
-        color: #f8f9fa;
-    }
+
+
+    body.dark-mode{
+    background-color: #222; /* Couleur sombre pour le header */
+    color: #f8f9fa;
+}
+
+    body.dark-mode header {
+    background-color: #222; /* Couleur sombre pour le header */
+    color: #f8f9fa;
+}
+
+body.dark-mode .pokemon {
+    background-color: #555; /* Couleur sombre pour les cartes Pokémon */
+}
+
+body.dark-mode .pokemon-stats {
+    background-color: #666; /* Couleur sombre pour les stats */
+    color: #fff;
+}
+
+body.dark-mode .button-nav {
+    background-color: #007bff; /* Boutons en mode sombre */
+    color: #fff;
+}
+
     .pokemon {
         text-align: center;
         margin: 20px;
@@ -60,19 +86,50 @@
     .pokedex-container {
         display: none;
         text-align: center;
+        width: 65%;
     }
+
+    .PokemonList{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
     .pokemon-small {
         display: inline-block;
         margin: 10px;
         text-align: center;
+        cursor: pointer;
     }
+
+
+    @keyframes flickerAnimation { 
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
+}
+.animate-flicker {
+    opacity:1;  
+    animation: flickerAnimation 1s infinite;
+}
+
+.pokemon-small img:hover{
+  animation: flickerAnimation 1s infinite;
+}
+
+.pokemon-small p{
+    font-family: 'Poppins';
+    font-weight: 700;
+}
+
     .pokemon-small img {
-        width: 50px;
-        height: 50px;
+        width: 90px;
+        height: 90px;
     }
     .search-container {
         text-align: center;
-        margin-top: 20px;
+        justify-content: center;
     }
     .search-container input {
         padding: 10px;
@@ -90,116 +147,366 @@
         border-radius: 5px;
     }
 
-    .dark-mode {
-        background-color: #000;
-        color: #f8f9fa;
-    }
-    .dark-mode header {
-        background-color: #333;
-    }
-    .dark-mode input {
-        background-color: #555;
-        color: #f8f9fa;
-    }
-    .dark-mode button {
-        background-color: #007bff;
+    .nav{
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        gap: 40px;
     }
 
-</style>
-<body>
+    .nav li{
+        font-family: 'poppins';
+        font-weight: bold;
+        font-size: 16px;
+        color: #FFF;
+    }
 
-    <header>
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background-color: #000;">
-            <!-- Logo cliquable -->
-            <a href="#" id="pokedex-link" style="font-size: 24px; font-weight: bold; text-decoration: none; color: #fff;">Pokédex</a>
-            
-            <!-- Barre de recherche -->
-            <div class="search-container" style="display: flex; align-items: center;">
-                <input type="text" id="search-input" placeholder="Rechercher un Pokémon" style="padding: 10px; font-size: 16px; margin-right: 10px; border: 1px solid #ccc; border-radius: 5px;">
-                <button id="search-button" style="padding: 10px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px;">Rechercher</button>
-            </div>
-            
-            <!-- Bouton Dark Mode -->
-            <button id="dark-mode-toggle" style="padding: 10px; font-size: 16px; cursor: pointer; background-color: #555; color: white; border: none; border-radius: 5px;">Dark Mode</button>
-        </div>
-    </header>
     
 
-    <div id="pokemon-container">
-        {% if pokemons %}
-            <div class="pokemon" id="pokemon-0">
-                <h3>{{ pokemons[0].name.capitalize() }}</h3>
-                <img src="{{ pokemons[0].image_url }}" alt="{{ pokemons[0].name }}">
-                <div class="pokemon-details">
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FF0000;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 9999px;
+  width: 100%;
+  max-width: 1024px;
+  height: auto;
+  min-height: 3rem;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0; /* Assure que le logo ne rétrécit pas trop */
+}
+
+.logo img {
+  height: 36px;
+  max-height: 48px;
+  width: auto;
+}
+
+/* Responsive Text */
+.header h1,
+.header h2,
+.header span {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  margin: 0;
+}
+
+/* Toggle Button */
+.theme-checkbox {
+  --toggle-size: 16px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 5.25em;
+  height: 2.125em;
+  background: -webkit-gradient(linear, left top, right top, color-stop(50%, #efefef), color-stop(50%, #2a2a2a)) no-repeat;
+  background: linear-gradient(to right, #efefef 50%, #2a2a2a 50%) no-repeat;
+  background-size: 205%;
+  background-position: 0;
+  border-radius: 99em;
+  position: relative;
+  cursor: pointer;
+  font-size: var(--toggle-size);
+  transition: 0.4s;
+}
+
+.theme-checkbox::before {
+  content: "";
+  width: 1.9em;
+  height: 1.9em;
+  position: absolute;
+  top: 1.9px;
+  left: 0.20em;
+  background: linear-gradient(to right, #efefef 50%, #2a2a2a 50%) no-repeat;
+  background-size: 205%;
+  background-position: 100%;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+.theme-checkbox:checked::before {
+  left: calc(100% - 1.25em - 0.438em);
+  background-position: 0;
+}
+
+.theme-checkbox:checked {
+  background-position: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .logo {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .theme-checkbox {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo img {
+    height: 32px;
+  }
+
+  .header {
+    padding: 0.75rem;
+  }
+
+  .theme-checkbox {
+    width: 4.5em;
+    height: 1.8em;
+  }
+
+  .theme-checkbox::before {
+    width: 1.6em;
+    height: 1.6em;
+  }
+}
+
+.pokemon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.pokemon {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    max-width: 1200px;
+    background: #FF0000;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+
+
+.pokemon-image img {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px, rgba(0, 0, 0, 0.1) 0px 6px 6px;
+    background: #FFF;
+}
+
+.pokemon-stats-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.pokemon-stats {
+    flex: 1;
+    min-width: 300px;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+}
+
+.pokemon-stats h4 {
+    margin-bottom: 1rem;
+    font-family: 'poppins';
+    font-size: 1.2rem;
+    color: #007bff;
+    border-bottom: 2px solid #007bff;
+    display: inline-block;
+}
+
+.pokemon-stats p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+.pokemon-stats strong {
+    color: #333;
+}
+
+
+</style>
+</head>
+<body>
+    <div class="header-container">
+        <header class="header">
+            <!-- Logo -->
+            <a href="#" id="pokedex-link">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" />
+                    <h2 style="font-size: 20px;">Pokedex</h2>
+
+                </div>
+            </a>
+            <ul class="nav">
+                <li><a href="#" id="pokedex-link">Acceuils</a></li>
+                <li><a href="#" id="pokedex-link">Stats</a></li>
+                <li><a href="#" id="pokedex-link">Combats</a></li>
+                <li><a href="#" id="pokedex-link">Aide</a></li>
+            </ul>
+            <!-- Bouton Dark Mode -->
+            <input type="checkbox" class="theme-checkbox" id="dark-mode-toggle">
+        </header>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="search-container" style="display: flex; align-items: center;">
+        <input type="text" id="search-input" placeholder="Rechercher un Pokémon" style="padding: 10px; font-size: 16px; margin-right: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        <button id="search-button" style="padding: 10px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px;">Rechercher</button>
+    </div>
+
+<div id="pokemon-container" class="pokemon-container">
+    {% if pokemons %}
+        <div class="pokemon">
+            <div class="pokemon-image">
+                <img id="pokemon-image" src="{{ pokemons[0].image_url }}" alt="{{ pokemons[0].name }}">
+                <h3 id="pokemon-name" style="color: #FFF; font-family: 'Poppins'; font-size: 25px;">
+                    {{ pokemons[0].name|title }}
+                </h3>
+            </div>
+            <div class="pokemon-stats-container">
+                <div class="pokemon-stats left-stats">
+                    <h4>Autres informations</h4>
+                    <p><strong>Capacités :</strong> {{ pokemons[0].abilities | join(', ') }}</p>
+                    <p><strong>Attaques :</strong> {{ pokemons[0].moves[:5] | join(', ') }}...</p>
+                </div>
+                <div class="pokemon-stats right-stats">
+                    <h4>Statistiques</h4>
+                    <p><strong>PV:</strong> {{ pokemons[0].base_experience }}</p>
                     <p><strong>Types :</strong> {{ pokemons[0].types | join(', ') }}</p>
                     <p><strong>Taille :</strong> {{ pokemons[0].height }} m</p>
                     <p><strong>Poids :</strong> {{ pokemons[0].weight }} kg</p>
                 </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+</div>
 
-    <div class="navigation">
-        <button class="button-nav" id="prev">← Précédent</button>
-        <button class="button-nav" id="next">Suivant →</button>
-    </div>
+<div class="navigation">
+    <button class="button-nav" id="prev">← Précédent</button>
+    <button class="button-nav" id="next">Suivant →</button>
+</div>
 
+<div class="PokemonList">
+    <div id="pokedex-container" class="pokedex-container">
+        <h2>Tous les Pokémons</h2>
+        <div id="pokedex"></div>
+        <button class="button-nav" id="back-to-view">Retour</button>
+    </div>
+</div>
+
+<div class="PokemonList">
     <div id="pokedex-container" class="pokedex-container">
         <h2>Tous les Pokémons</h2>
         <div id="pokedex"></div>
         <button class="button-nav" id="back-to-view">Retour</button>
     </div>
 
+</div>
+    
     <script>
-        let pokemons = {{ pokemons | tojson }};
-        let currentIndex = 0;
+ const pokemons = {{ pokemons | tojson }};
+    let currentIndex = 0;
 
-        // Fonction pour mettre à jour l'affichage du Pokémon
-        const updatePokemon = (index) => {
-            const pokemon = pokemons[index];
-            const container = document.getElementById('pokemon-container');
-            container.innerHTML = `
-                <div class="pokemon">
-                    <h3>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
-                    <img src="${pokemon.image_url}" alt="${pokemon.name}">
-                    <div class="pokemon-details">
-                        <p><strong>Types :</strong> ${pokemon.types.join(', ')}</p>
-                        <p><strong>Taille :</strong> ${pokemon.height} m</p>
-                        <p><strong>Poids :</strong> ${pokemon.weight} kg</p>
-                    </div>
-                </div>
-            `;
-        };
+    const updatePokemon = (index) => {
+        const pokemon = pokemons[index];
 
-        // Navigation des Pokémons
-        document.getElementById('next').addEventListener('click', () => {
-            if (currentIndex < pokemons.length - 1) {
-                currentIndex++;
-                updatePokemon(currentIndex);
-            }
-        });
+        // Met à jour les informations principales
+        const pokemonImage = document.getElementById('pokemon-image');
+        const pokemonName = document.getElementById('pokemon-name');
+        pokemonImage.src = pokemon.image_url;
+        pokemonImage.alt = pokemon.name;
+        pokemonName.textContent = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 
-        document.getElementById('prev').addEventListener('click', () => {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updatePokemon(currentIndex);
-            }
-        });
+        // Met à jour les statistiques de gauche
+        const leftStats = document.querySelector('.pokemon-stats.left-stats');
+        leftStats.innerHTML = `
+            <h4>Autres informations</h4>
+            <p><strong>Capacités :</strong> ${pokemon.abilities.join(', ')}</p>
+            <p><strong>Mouvements :</strong> ${pokemon.moves.slice(0, 5).join(', ')}...</p>
+        `;
 
-        // Afficher le Pokédex avec des vignettes
+        // Met à jour les statistiques de droite
+        const rightStats = document.querySelector('.pokemon-stats.right-stats');
+        rightStats.innerHTML = `
+            <h4>Statistiques</h4>
+            <p><strong>Types :</strong> ${pokemon.types.join(', ')}</p>
+            <p><strong>Taille :</strong> ${pokemon.height} m</p>
+            <p><strong>Poids :</strong> ${pokemon.weight} kg</p>
+            <p><strong>Expérience de base :</strong> ${pokemon.base_experience}</p>
+        `;
+    };
+
+    // Gestion des boutons "Suivant" et "Précédent"
+    const nextButton = document.getElementById('next');
+    const prevButton = document.getElementById('prev');
+
+    nextButton.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % pokemons.length; // Passe au suivant (boucle)
+        updatePokemon(currentIndex);
+    });
+
+    prevButton.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + pokemons.length) % pokemons.length; // Passe au précédent (boucle)
+        updatePokemon(currentIndex);
+    });
+
+    // Initialise l'affichage avec le premier Pokémon
+    updatePokemon(currentIndex);
+
+
+        // Display the Pokédex with thumbnails
         document.getElementById('pokedex-link').addEventListener('click', (event) => {
             event.preventDefault();
             const pokedexContainer = document.getElementById('pokedex-container');
             const pokedex = document.getElementById('pokedex');
             pokedex.innerHTML = '';
 
-            pokemons.forEach(pokemon => {
+            pokemons.forEach((pokemon, index) => {
                 const pokemonDiv = document.createElement('div');
                 pokemonDiv.className = 'pokemon-small';
                 pokemonDiv.innerHTML = `
                     <img src="${pokemon.image_url}" alt="${pokemon.name}">
                     <p>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</p>
                 `;
+                pokemonDiv.addEventListener('click', () => {
+                    currentIndex = index;
+                    updatePokemon(currentIndex);
+                    document.getElementById('pokemon-container').style.display = 'block';
+                    pokedexContainer.style.display = 'none';
+                });
                 pokedex.appendChild(pokemonDiv);
             });
 
@@ -207,13 +514,13 @@
             pokedexContainer.style.display = 'block';
         });
 
-        // Retour à la vue individuelle
+        // Return to individual view
         document.getElementById('back-to-view').addEventListener('click', () => {
             document.getElementById('pokemon-container').style.display = 'block';
             document.getElementById('pokedex-container').style.display = 'none';
         });
 
-        // Recherche de Pokémon
+        // Pokémon search
         document.getElementById('search-button').addEventListener('click', () => {
             const searchValue = document.getElementById('search-input').value.toLowerCase();
             const foundPokemon = pokemons.find(p => p.name.toLowerCase() === searchValue);
@@ -225,10 +532,12 @@
             }
         });
 
-        // Dark Mode Toggle
-        document.getElementById('dark-mode-toggle').addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        });
+       document.getElementById('dark-mode-toggle').addEventListener('change', (event) => {
+    const isChecked = event.target.checked;
+    document.body.classList.toggle('dark-mode', isChecked);
+});
+
+
 
     </script>
 
