@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokédex</title>
@@ -185,7 +182,6 @@ body.dark-mode .button-nav {
   max-width: 1024px;
   height: auto;
   min-height: 3rem;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   box-sizing: border-box;
 }
 
@@ -365,7 +361,7 @@ body.dark-mode .button-nav {
             <!-- Logo -->
             <a href="#" id="pokedex-link">
                 <div class="logo">
-                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" />
+                    <img src="{{ url_for('static', filename='pokeball_PNG11.png') }}" alt="Logo" />
                     <h2 style="font-size: 20px;">Pokedex</h2>
 
                 </div>
@@ -455,7 +451,7 @@ body.dark-mode .button-nav {
         leftStats.innerHTML = `
             <h4>Autres informations</h4>
             <p><strong>Capacités :</strong> ${pokemon.abilities.join(', ')}</p>
-            <p><strong>Mouvements :</strong> ${pokemon.moves.slice(0, 5).join(', ')}...</p>
+            <p><strong>Attaques :</strong> ${pokemon.moves.slice(0, 5).join(', ')}...</p>
         `;
 
         // Met à jour les statistiques de droite
@@ -465,13 +461,14 @@ body.dark-mode .button-nav {
             <p><strong>Types :</strong> ${pokemon.types.join(', ')}</p>
             <p><strong>Taille :</strong> ${pokemon.height} m</p>
             <p><strong>Poids :</strong> ${pokemon.weight} kg</p>
-            <p><strong>Expérience de base :</strong> ${pokemon.base_experience}</p>
+            <p><strong>PV:</strong> ${pokemon.base_experience}</p>
         `;
     };
 
     // Gestion des boutons "Suivant" et "Précédent"
     const nextButton = document.getElementById('next');
     const prevButton = document.getElementById('prev');
+    
 
     nextButton.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % pokemons.length; // Passe au suivant (boucle)
@@ -504,7 +501,7 @@ body.dark-mode .button-nav {
                 pokemonDiv.addEventListener('click', () => {
                     currentIndex = index;
                     updatePokemon(currentIndex);
-                    document.getElementById('pokemon-container').style.display = 'block';
+                    document.getElementById('pokemon-container').style.display = 'flex';
                     pokedexContainer.style.display = 'none';
                 });
                 pokedex.appendChild(pokemonDiv);
@@ -540,6 +537,3 @@ body.dark-mode .button-nav {
 
 
     </script>
-
-</body>
-</html>
