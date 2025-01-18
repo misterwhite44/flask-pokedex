@@ -96,7 +96,7 @@ body.dark-mode .button-nav {
 
     .pokemon-small {
         display: inline-block;
-        margin: 10px;
+        margin: 30px;
         text-align: center;
         cursor: pointer;
     }
@@ -119,6 +119,12 @@ body.dark-mode .button-nav {
 .pokemon-small p{
     font-family: 'Poppins';
     font-weight: 700;
+}
+
+.pokemon-types span{
+    padding: 0.45rem 0.8rem;
+    border-radius: 20px;
+    color: #FFF;
 }
 
     .pokemon-small img {
@@ -468,20 +474,38 @@ body.dark-mode .button-nav {
 </div>
     
     <script>
- const pokemons = {{ pokemons | tojson }};
+    const typeColors = {
+        normal: '#A8A77A',
+        fire: '#EE8130',
+        water: '#6390F0',
+        electric: '#F7D02C',
+        grass: '#7AC74C',
+        ice: '#96D9D6',
+        fighting: '#C22E28',
+        poison: '#A33EA1',
+        ground: '#E2BF65',
+        flying: '#A98FF3',
+        psychic: '#F95587',
+        bug: '#A6B91A',
+        rock: '#B6A136',
+        ghost: '#735797',
+        dragon: '#6F35FC',
+        dark: '#705746',
+        steel: '#B7B7CE',
+        fairy: '#D685AD',
+    };
+
+    const pokemons = {{ pokemons | tojson }};
     let currentIndex = 0;
 
     const updatePokemon = (index) => {
         const pokemon = pokemons[index];
-
-        // Met à jour les informations principales
         const pokemonImage = document.getElementById('pokemon-image');
         const pokemonName = document.getElementById('pokemon-name');
         pokemonImage.src = pokemon.image_url;
         pokemonImage.alt = pokemon.name;
         pokemonName.textContent = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
 
-        // Met à jour les statistiques de gauche
         const leftStats = document.querySelector('.pokemon-stats.left-stats');
         leftStats.innerHTML = `
             <h4>Autres informations</h4>
@@ -489,7 +513,6 @@ body.dark-mode .button-nav {
             <p><strong>Attaques :</strong> ${pokemon.moves.slice(0, 5).join(', ')}...</p>
         `;
 
-        // Met à jour les statistiques de droite
         const rightStats = document.querySelector('.pokemon-stats.right-stats');
         rightStats.innerHTML = `
             <h4>Statistiques</h4>
@@ -500,75 +523,70 @@ body.dark-mode .button-nav {
         `;
     };
 
-    // Gestion des boutons "Suivant" et "Précédent"
     const nextButton = document.getElementById('next');
     const prevButton = document.getElementById('prev');
-    
 
     nextButton.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % pokemons.length; // Passe au suivant (boucle)
+        currentIndex = (currentIndex + 1) % pokemons.length;
         updatePokemon(currentIndex);
     });
 
     prevButton.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + pokemons.length) % pokemons.length; // Passe au précédent (boucle)
+        currentIndex = (currentIndex - 1 + pokemons.length) % pokemons.length;
         updatePokemon(currentIndex);
     });
 
-    // Initialise l'affichage avec le premier Pokémon
     updatePokemon(currentIndex);
 
+    document.getElementById('pokedex-link').addEventListener('click', (event) => {
+        event.preventDefault();
+        const pokedexContainer = document.getElementById('pokedex-container');
+        const pokedex = document.getElementById('pokedex');
+        pokedex.innerHTML = '';
 
-        // Display the Pokédex with thumbnails
-        document.getElementById('pokedex-link').addEventListener('click', (event) => {
-            event.preventDefault();
-            const pokedexContainer = document.getElementById('pokedex-container');
-            const pokedex = document.getElementById('pokedex');
-            pokedex.innerHTML = '';
-
-            pokemons.forEach((pokemon, index) => {
-                const pokemonDiv = document.createElement('div');
-                pokemonDiv.className = 'pokemon-small';
-                pokemonDiv.innerHTML = `
-                    <img src="${pokemon.image_url}" alt="${pokemon.name}">
-                    <p>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</p>
-                `;
-                pokemonDiv.addEventListener('click', () => {
-                    currentIndex = index;
-                    updatePokemon(currentIndex);
-                    document.getElementById('pokemon-container').style.display = 'flex';
-                    pokedexContainer.style.display = 'none';
-                });
-                pokedex.appendChild(pokemonDiv);
-            });
-
-            document.getElementById('pokemon-container').style.display = 'none';
-            pokedexContainer.style.display = 'block';
-        });
-
-        // Return to individual view
-        document.getElementById('back-to-view').addEventListener('click', () => {
-            document.getElementById('pokemon-container').style.display = 'block';
-            document.getElementById('pokedex-container').style.display = 'none';
-        });
-
-        // Pokémon search
-        document.getElementById('search-button').addEventListener('click', () => {
-            const searchValue = document.getElementById('search-input').value.toLowerCase();
-            const foundPokemon = pokemons.find(p => p.name.toLowerCase() === searchValue);
-            if (foundPokemon) {
-                currentIndex = pokemons.indexOf(foundPokemon);
+        pokemons.forEach((pokemon, index) => {
+            const pokemonDiv = document.createElement('div');
+            pokemonDiv.className = 'pokemon-small';
+            pokemonDiv.innerHTML = `
+                <img src="${pokemon.image_url}" alt="${pokemon.name}">
+                <p>${pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</p>
+                <div class="pokemon-types">
+                    ${pokemon.types.map(type => `<span class="pokemon-type" style="background-color: ${typeColors[type.toLowerCase()]};">${type}</span>`).join(' ')}
+                </div>
+            `;
+            pokemonDiv.addEventListener('click', () => {
+                currentIndex = index;
                 updatePokemon(currentIndex);
-            } else {
-                alert('Pokémon non trouvé !');
-            }
+                document.getElementById('pokemon-container').style.display = 'flex';
+                pokedexContainer.style.display = 'none';
+            });
+            pokedex.appendChild(pokemonDiv);
         });
 
-       document.getElementById('dark-mode-toggle').addEventListener('change', (event) => {
-    const isChecked = event.target.checked;
-    document.body.classList.toggle('dark-mode', isChecked);
-});
+        document.getElementById('pokemon-container').style.display = 'none';
+        pokedexContainer.style.display = 'block';
+    });
 
+    document.getElementById('back-to-view').addEventListener('click', () => {
+        document.getElementById('pokemon-container').style.display = 'block';
+        document.getElementById('pokedex-container').style.display = 'none';
+    });
+
+    document.getElementById('search-button').addEventListener('click', () => {
+        const searchValue = document.getElementById('search-input').value.toLowerCase();
+        const foundPokemon = pokemons.find(p => p.name.toLowerCase() === searchValue);
+        if (foundPokemon) {
+            currentIndex = pokemons.indexOf(foundPokemon);
+            updatePokemon(currentIndex);
+        } else {
+            alert('Pokémon non trouvé !');
+        }
+    });
+
+    document.getElementById('dark-mode-toggle').addEventListener('change', (event) => {
+        const isChecked = event.target.checked;
+        document.body.classList.toggle('dark-mode', isChecked);
+    });
 
 
     </script>
