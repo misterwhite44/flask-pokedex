@@ -27,9 +27,6 @@
         text-decoration: none;
     }
     
-    header a:hover {
-        color: #dfdb00;
-    }
 
 
     body.dark-mode{
@@ -56,6 +53,10 @@ body.dark-mode .button-nav {
     color: #fff;
 }
 
+body.dark-mode .pokemon-stats{
+    color: #fff;
+}
+
     .pokemon {
         text-align: center;
         margin: 20px;
@@ -72,15 +73,31 @@ body.dark-mode .button-nav {
         text-align: center;
         margin-top: 20px;
     }
+  
     .button-nav {
-        padding: 10px;
+        padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
+        background-color: #FF0000; /* Pokémon yellow */
+        color: #FFF; /* Pokémon blue */
+        border: 2px solid #FFF;
+        border-radius: 12px;
+        box-shadow: 0 4px #999;
+        transition: all 0.2s ease-in-out;
     }
+
+    .button-nav:hover {
+        background-color: #FFD700; /* Lighter yellow on hover */
+        box-shadow: 0 6px #666;
+    }
+
+    .button-nav:active {
+        background-color: #FFCC00;
+        box-shadow: 0 2px #666;
+        transform: translateY(2px);
+    }
+
+
     .pokedex-container {
         display: none;
         text-align: center;
@@ -125,12 +142,26 @@ body.dark-mode .button-nav {
     padding: 0.45rem 0.8rem;
     border-radius: 20px;
     color: #FFF;
+    font-weight: 700;
+}
+
+.pokemon-types2 span{
+    padding: 0.45rem 0.8rem;
+    border-radius: 20px;
+    color: #FFF;
+    font-weight: 700;
+}
+
+.pokemon-types2{
+    margin-top: 30px;
 }
 
     .pokemon-small img {
         width: 90px;
         height: 90px;
     }
+
+
     .search-container {
         text-align: center;
         justify-content: center;
@@ -142,13 +173,15 @@ body.dark-mode .button-nav {
         margin-right: 10px;
     }
     .search-container button {
-        padding: 10px;
+        padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
+        background-color: #FF0000; /* Pokémon yellow */
+        color: #FFF; /* Pokémon blue */
+        border: 2px solid #FFF;
+        border-radius: 12px;
+        box-shadow: 0 4px #999;
+        transition: all 0.2s ease-in-out;
     }
 
 
@@ -379,8 +412,8 @@ body.dark-mode .button-nav {
     margin-bottom: 1rem;
     font-family: 'poppins';
     font-size: 1.2rem;
-    color: #007bff;
-    border-bottom: 2px solid #007bff;
+    color: #333;
+    border-bottom: 2px solid #FF0000;
     display: inline-block;
 }
 
@@ -410,7 +443,7 @@ body.dark-mode .button-nav {
             <ul class="nav">
                 <li><a href="#" id="pokedex-link">Acceuil</a></li>
                 <li><a href="#" id="pokedex-link">Stats</a></li>
-                <li><a href="#" id="pokedex-link">Combats</a></li>
+                <li><a href="/combat" id="pokedex-link">Combats</a></li>
                 <li><a href="#" id="pokedex-link">Aide</a></li>
             </ul>
             <!-- Bouton Dark Mode -->
@@ -421,7 +454,15 @@ body.dark-mode .button-nav {
     <!-- Barre de recherche -->
     <div class="search-container" style="display: flex; align-items: center;">
         <input type="text" id="search-input" placeholder="Rechercher un Pokémon" style="padding: 10px; font-size: 16px; margin-right: 10px; border: 1px solid #ccc; border-radius: 5px;">
-        <button id="search-button" style="padding: 10px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px;">Rechercher</button>
+        <button id="search-button" style=" padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #FF0000; /* Pokémon yellow */
+        color: #FFF; /* Pokémon blue */
+        border: 2px solid #FFF;
+        border-radius: 12px;
+        box-shadow: 0 4px #999;
+        transition: all 0.2s ease-in-out;">Rechercher</button>
     </div>
 
 <div id="pokemon-container" class="pokemon-container">
@@ -438,6 +479,7 @@ body.dark-mode .button-nav {
                     <h4>Autres informations</h4>
                     <p><strong>Capacités :</strong> {{ pokemons[0].abilities | join(', ') }}</p>
                     <p><strong>Attaques :</strong> {{ pokemons[0].moves[:5] | join(', ') }}...</p>
+                    
                 </div>
                 <div class="pokemon-stats right-stats">
                     <h4>Statistiques</h4>
@@ -511,6 +553,9 @@ body.dark-mode .button-nav {
             <h4>Autres informations</h4>
             <p><strong>Capacités :</strong> ${pokemon.abilities.join(', ')}</p>
             <p><strong>Attaques :</strong> ${pokemon.moves.slice(0, 5).join(', ')}...</p>
+            <div class="pokemon-types2">
+                ${pokemon.types.map(type => `<span class="pokemon-type" style="background-color: ${typeColors[type.toLowerCase()]};">${type}</span>`).join(' ')}
+            </div>
         `;
 
         const rightStats = document.querySelector('.pokemon-stats.right-stats');
