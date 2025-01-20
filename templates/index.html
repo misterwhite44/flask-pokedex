@@ -30,26 +30,26 @@
 
 
     body.dark-mode{
-    background-color: #222; /* Couleur sombre pour le header */
+    background-color: #222; 
     color: #f8f9fa;
 }
 
     body.dark-mode header {
-    background-color: #222; /* Couleur sombre pour le header */
+    background-color: #222; 
     color: #f8f9fa;
 }
 
 body.dark-mode .pokemon {
-    background-color: #555; /* Couleur sombre pour les cartes Pokémon */
+    background-color: #555; 
 }
 
 body.dark-mode .pokemon-stats {
-    background-color: #666; /* Couleur sombre pour les stats */
+    background-color: #666; 
     color: #fff;
 }
 
 body.dark-mode .button-nav {
-    background-color: #007bff; /* Boutons en mode sombre */
+    background-color: #333;
     color: #fff;
 }
 
@@ -78,8 +78,8 @@ body.dark-mode .pokemon-stats{
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        background-color: #FF0000; /* Pokémon yellow */
-        color: #FFF; /* Pokémon blue */
+        background-color: #FF0000; 
+        color: #FFF; 
         border: 2px solid #FFF;
         border-radius: 12px;
         box-shadow: 0 4px #999;
@@ -87,7 +87,7 @@ body.dark-mode .pokemon-stats{
     }
 
     .button-nav:hover {
-        background-color: #FFD700; /* Lighter yellow on hover */
+        background-color: #FFD700;
         box-shadow: 0 6px #666;
     }
 
@@ -176,8 +176,8 @@ body.dark-mode .pokemon-stats{
         padding: 10px 20px;
         font-size: 16px;
         cursor: pointer;
-        background-color: #FF0000; /* Pokémon yellow */
-        color: #FFF; /* Pokémon blue */
+        background-color: #FF0000;
+        color: #FFF;
         border: 2px solid #FFF;
         border-radius: 12px;
         box-shadow: 0 4px #999;
@@ -192,7 +192,7 @@ body.dark-mode .pokemon-stats{
         gap: 45px;
         padding-right: 40px;
         position: relative;
-        justify-content: center; /* Center the links */
+        justify-content: center;
     }
 
       .nav li {
@@ -263,7 +263,7 @@ body.dark-mode .pokemon-stats{
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-shrink: 0; /* Assure que le logo ne rétrécit pas trop */
+  flex-shrink: 0;
 }
 
 .logo img {
@@ -272,7 +272,11 @@ body.dark-mode .pokemon-stats{
   width: auto;
 }
 
-/* Responsive Text */
+.logo img:hover{
+    animation: spin 1s infinite linear;
+}
+
+
 .header h1,
 .header h2,
 .header span {
@@ -280,7 +284,7 @@ body.dark-mode .pokemon-stats{
   margin: 0;
 }
 
-/* Toggle Button */
+
 .theme-checkbox {
   --toggle-size: 16px;
   -webkit-appearance: none;
@@ -322,7 +326,6 @@ body.dark-mode .pokemon-stats{
   background-position: 100%;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .header {
     flex-direction: column;
@@ -424,6 +427,15 @@ body.dark-mode .pokemon-stats{
 
 .pokemon-stats strong {
     color: #333;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 

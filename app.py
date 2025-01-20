@@ -51,18 +51,9 @@ def search_pokemon():
         return jsonify({"error": "Pokémon non trouvé"}), 404
     
 
-@app.route('/combat', methods=['GET', 'POST'])
+@app.route('/combat')
 def combat():
-    pokemons = [
-        # Load or fetch your Pokémon data
-    ]
+    return render_template('combat.html')
 
-    if request.method == 'POST':
-        team1 = request.form.getlist('team1')
-        team2 = request.form.getlist('team2')
-        return render_template('combat.html', pokemons=pokemons, team1=team1, team2=team2)
-
-    return render_template('combat.html', pokemons=pokemons, team1=[], team2=[])
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
