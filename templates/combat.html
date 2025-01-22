@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,7 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
+               body {
             
             font-family: 'Poppins', sans-serif;
             color: #333;
@@ -334,7 +337,13 @@ body.dark-mode .pokemon-stats{
         .team {
             display: flex;
             justify-content: center;
+            
             margin: 20px 0;
+        }
+
+        #team1,#team2{
+          display: flex;
+          flex-direction: column;
         }
 
         .container_team1, .container_team2 {
@@ -366,10 +375,16 @@ body.dark-mode .pokemon-stats{
             height: 100px;
         }
 
+          .pokemon-select p {
+            font-weight: 800;
+        }
+
         .ajout {
             background-color: #ff0000;
             color: #fff;
             border: none;
+            font-family: 'Poppins';
+            font-weight: 800;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
@@ -380,6 +395,52 @@ body.dark-mode .pokemon-stats{
             background-color: #cc0000;
         }
 
+        .title_combat{
+            text-align: center;
+        }
+
+        .title_combat2{
+          text-align: center;
+          margin-top: 40px;
+        }
+
+        .list_container{
+              display: flex;
+              width: 100%;
+              justify-content: center;
+              align-items: center;
+        }
+
+        .combat-button {
+    display: none;
+    background: #ff0000;
+    color: white;
+    padding: 20px 40px;
+    font-size: 24px;
+    font-family: 'Poppins', bold;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    cursor: pointer;
+    margin: 30px auto;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.combat-button:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+    50% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.8); }
+    100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+}
+        .combat-button {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -401,7 +462,7 @@ body.dark-mode .pokemon-stats{
         </header>
     </div>
 
-    <h1>Formez vos équipes pour le combat</h1>
+    <h1 class="title_combat">Formez vos équipes pour le combat</h1>
     <div class="team">
         <div class="container_team1">
             <h2>Équipe 1</h2>
@@ -412,9 +473,12 @@ body.dark-mode .pokemon-stats{
             <div id="team2" class="team"></div>
         </div>
     </div>
-    
-    <h2>Liste des Pokémon</h2>
-    <div id="pokemon-list"></div>
+    <div style="text-align: center;">
+        <button id="combat-button" class="combat-button">⚔️ COMBAT ⚔️</button>
+    </div>
+
+    <h2 class="title_combat2">Liste des Pokémon</h2>
+    <div class="list_container"><div id="pokemon-list"></div></div>
 
     <script>
         const team1 = [];
@@ -460,25 +524,25 @@ body.dark-mode .pokemon-stats{
                 return;
             }
 
-            if (team1.length < maxTeamSize) {
-                team1.push(name);
-                document.getElementById('team1').innerHTML += `<div>${name}</div>`;
-                alert('Pokémon ajouté à l\'équipe 1 avec succès!');
-            } else if (team2.length < maxTeamSize) {
-                team2.push(name);
-                document.getElementById('team2').innerHTML += `<div>${name}</div>`;
-                alert('Pokémon ajouté à l\'équipe 2 avec succès!');
-            } else {
-                alert('Les deux équipes sont complètes!');
+            const teamToAdd = team1.length < maxTeamSize ? team1 : (team2.length < maxTeamSize ? team2 : null);
+            if (teamToAdd) {
+                teamToAdd.push(name);
+                const teamId = teamToAdd === team1 ? 'team1' : 'team2';
+                document.getElementById(teamId).innerHTML += `<div>${name}</div>`;
+            }
+
+            // Afficher le bouton combat si les deux équipes sont pleines
+            if (team1.length === maxTeamSize && team2.length === maxTeamSize) {
+                document.getElementById('combat-button').style.display = 'inline-block';
             }
         }
 
-        fetchPokemons();
-
         document.getElementById('dark-mode-toggle').addEventListener('change', (event) => {
-        const isChecked = event.target.checked;
-        document.body.classList.toggle('dark-mode', isChecked);
-    });
+            const isChecked = event.target.checked;
+            document.body.classList.toggle('dark-mode', isChecked);
+        });
+
+        fetchPokemons();
     </script>
 </body>
 </html>
