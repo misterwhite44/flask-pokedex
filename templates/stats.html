@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats Pokémon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #333;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #ccc;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .header-container {
+            background-color: #FF0000;
+            padding: 10px;
+        }
+        .header-container h1 {
+            color: #FFF;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Stats Pokémon</h1>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Attaque (Base Experience)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stat in stats %}
+            <tr>
+                <td>{{ stat.id }}</td>
+                <td>{{ stat.name }}</td>
+                <td>{{ stat.attack }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

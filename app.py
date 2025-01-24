@@ -49,6 +49,15 @@ def search_pokemon():
         return jsonify(found_pokemon)
     else:
         return jsonify({"error": "Pokémon non trouvé"}), 404
+    
+
+@app.route("/stats")
+def stats():
+    # Récupérer les statistiques d'attaque pour chaque Pokémon
+    stats_list = [{"id": p["id"], "name": p["name"], "attack": p["base_experience"]} for p in pokemon_list]
+
+    return render_template("stats.html", stats=stats_list)
+
 
 @app.route('/combat')
 def combat():
