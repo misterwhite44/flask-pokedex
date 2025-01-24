@@ -27,7 +27,7 @@ def get_pokemon_data(pokemon_id):
         return None
 
 # Récupérer les données des 150 premiers Pokémon
-pokemon_list = [get_pokemon_data(i) for i in range(1, 191) if get_pokemon_data(i) is not None]
+pokemon_list = [get_pokemon_data(i) for i in range(1, 151) if get_pokemon_data(i) is not None]
 
 @app.route("/")
 def index():
@@ -49,11 +49,46 @@ def search_pokemon():
         return jsonify(found_pokemon)
     else:
         return jsonify({"error": "Pokémon non trouvé"}), 404
-    
 
 @app.route('/combat')
 def combat():
     return render_template('combat.html')
+
+@app.route('/api/combat', methods=['POST'])
+def combat_simulation():
+    data = request.json
+    team1 = data.get('team1', [])
+    team2 = data.get('team2', [])
+
+    if not team1 or not team2:
+        return jsonify({"error": "Les deux équipes doivent être remplies."}), 400
+
+    # Calcul des scores des équipes
+    def calculate_team_score(team):
+        score = 0
+        for pokemon_name in team:
+            pokemon = next((p for p in pokemon_list if p["name"] == pokemon_name), None)
+            if pokemon:
+                score += pokemon["base_experience"]  # Exemple : base_experience comme score
+        return score
+
+    score_team1 = calculate_team_score(team1)
+    score_team2 = calculate_team_score(team2)
+
+    # Déterminer le gagnant
+    if score_team1 > score_team2:
+        winner = "Équipe 1"
+    elif score_team2 > score_team1:
+        winner = "Équipe 2"
+    else:
+        winner = "Match nul"
+
+    return jsonify({
+        "team1_score": score_team1,
+        "team2_score": score_team2,
+        "winner": winner
+    })
+
 
 if __name__ == '__main__':
     app.run(debug=True)

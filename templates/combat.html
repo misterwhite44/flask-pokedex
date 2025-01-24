@@ -453,7 +453,7 @@ body.dark-mode .pokemon-stats{
                 </div>
             </a>
             <ul class="nav">
-                <li><a href="#" id="pokedex-link">Acceuil</a></li>
+                <li><a href="/" id="pokedex-link">Accueil</a></li>
                 <li><a href="#" id="pokedex-link">Stats</a></li>
                 <li><a href="/combat" id="pokedex-link">Combats</a></li>
                 <li><a href="#" id="pokedex-link">Aide</a></li>
@@ -474,11 +474,13 @@ body.dark-mode .pokemon-stats{
         </div>
     </div>
     <div style="text-align: center;">
-        <button id="combat-button" class="combat-button">⚔️ COMBAT ⚔️</button>
+        <button id="combat-button" class="combat-button" style="display: none;">⚔️ COMBAT ⚔️</button>
     </div>
 
     <h2 class="title_combat2">Liste des Pokémon</h2>
-    <div class="list_container"><div id="pokemon-list"></div></div>
+    <div class="list_container">
+        <div id="pokemon-list"></div>
+    </div>
 
     <script>
         const team1 = [];
@@ -528,7 +530,10 @@ body.dark-mode .pokemon-stats{
             if (teamToAdd) {
                 teamToAdd.push(name);
                 const teamId = teamToAdd === team1 ? 'team1' : 'team2';
-                document.getElementById(teamId).innerHTML += `<div>${name}</div>`;
+                const teamDiv = document.getElementById(teamId);
+                const pokemonElement = document.createElement('p');
+                pokemonElement.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+                teamDiv.appendChild(pokemonElement);
             }
 
             // Afficher le bouton combat si les deux équipes sont pleines
@@ -536,6 +541,32 @@ body.dark-mode .pokemon-stats{
                 document.getElementById('combat-button').style.display = 'inline-block';
             }
         }
+
+        document.getElementById('combat-button').addEventListener('click', async () => {
+            if (team1.length < maxTeamSize || team2.length < maxTeamSize) {
+                alert('Les deux équipes doivent avoir 5 Pokémon.');
+                return;
+            }
+
+            const response = await fetch('/api/combat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ team1, team2 })
+            });
+
+            const result = await response.json();
+
+            if (result.error) {
+                alert(result.error);
+            } else {
+                alert(`Résultat du combat :
+Équipe 1 : ${result.team1_score} points 
+Équipe 2 : ${result.team2_score} points 
+Gagnant : ${result.winner}`);
+            }
+        });
 
         document.getElementById('dark-mode-toggle').addEventListener('change', (event) => {
             const isChecked = event.target.checked;
