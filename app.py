@@ -58,6 +58,11 @@ def stats():
 
     return render_template("stats.html", stats=stats_list)
 
+@app.route("/aide")
+def aide():
+    return render_template("aide.html")
+
+
 
 @app.route('/combat')
 def combat():
